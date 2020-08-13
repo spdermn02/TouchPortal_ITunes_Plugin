@@ -89,10 +89,10 @@ Here are a few examples, this is not the full list of what you have access to, j
 ![TP iTunes Set Artwork to Button Icon](images/TPiTunes-SetArtworkToIcon.png)
 
 #### Shuffle w/ Time Played
-<img src="images/TPitunes-ShuffleButton.png" height=700 alt="TP iTunes Shuffle with Time Played" />
+<img src="images/TPiTunes-ShuffleButton.png" height=700 alt="TP iTunes Shuffle with Time Played" />
 
 #### Volume Up - with Image Changes
-<img src="images/TPitunes-VolumeUpButton.png" height=700 alt="TP iTunes Volume Up - With Image Changes" />
+<img src="images/TPiTunes-VolumeUpButton.png" height=700 alt="TP iTunes Volume Up - With Image Changes" />
 
 ## States
 Here are the states that the TPiTunes Plug-in has:

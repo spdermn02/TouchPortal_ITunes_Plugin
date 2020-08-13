@@ -11,7 +11,11 @@
     "pkg-mac": "pkg --targets node12-macos-x64 ."
   },
   "author": "",
-  "license": "ISC",
+  "license": "GPLv3",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spdermn02/TouchPortal_ITunes_Plugin.git"
+  },
   "dependencies": {
     "touchportal-api": "^1.0.6",
     "winax": "^1.20.0"

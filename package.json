@@ -1,0 +1,20 @@
+{
+  "name": "itunes-win",
+  "version": "1.0.0",
+  "description": "",
+  "bin": "src/index.js",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "pkg": "pkg .",
+    "pkg-win": "pkg --targets node12-win-x64 .",
+    "pkg-mac": "pkg --targets node12-macos-x64 ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "touchportal-api": "^1.0.6",
+    "winax": "^1.20.0"
+  },
+  "devDependencies": {}
+}

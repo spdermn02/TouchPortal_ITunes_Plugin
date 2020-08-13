@@ -1,0 +1,178 @@
+{
+    "sdk": 2,
+    "version": 1,
+    "TP_iTunes_Version":"1.0.0",
+    "name": "Touch Portal iTunes Plugin",
+    "id": "TPiTunes",
+    "plugin_start_cmd": "\"%TP_PLUGIN_FOLDER%TPiTunes\\tpitunes.exe\" \"%TP_PLUGIN_FOLDER%TPiTunes\"",
+    "configuration": {
+        "colorDark": "#225834",
+        "colorLight": "#45b168"
+    },
+    "categories": [
+        {
+            "id": "TPiTunes",
+            "name": "iTunes",
+            "imagepath": "%TP_PLUGIN_FOLDER%TPiTunes/iTunes-24x24.png",
+            "actions": [
+                {
+                    "id": "itunes_toggle_play_action",
+                    "prefix": "iTunes:",
+                    "name": "Play/Pause Toggle",
+                    "type": "communicate"
+                },
+                {
+                    "id": "itunes_next_track",
+                    "prefix": "iTunes:",
+                    "name": ">> Next Track",
+                    "type": "communicate"
+                },
+                {
+                    "id": "itunes_back_track",
+                    "prefix": "iTunes:",
+                    "name": "<< Back Track",
+                    "type": "communicate"
+                },
+                {
+                    "id": "itunes_shuffle_action",
+                    "prefix": "iTunes:",
+                    "name": "Shuffle",
+                    "type": "communicate"
+                },
+                {
+                    "id": "itunes_repeat_action",
+                    "prefix": "iTunes:",
+                    "name": "Repeat",
+                    "type": "communicate"
+                },
+                {
+                    "id": "itunes_volume_up",
+                    "prefix": "iTunes:",
+                    "name": "Volume Up + 10",
+                    "type": "communicate"
+                },
+                {
+                    "id": "itunes_volume_down",
+                    "prefix": "iTunes:",
+                    "name": "Volume Down - 10",
+                    "type": "communicate"
+                },
+                {
+                    "id": "itunes_play_playlist",
+                    "prefix": "iTunes:",
+                    "name":"Play iTunes Playlist",
+                    "format": "Play iTunes Playlist {$itunes_playlists$} with Shuffle: {$itunes_shuffle_playlist$} and Repeat: {$itunes_repeat_playlist$}",
+                    "tryInline": "true",
+                    "type": "communicate",
+                    "data":[
+                        {
+                            "id":"itunes_playlists",
+                            "type":"choice",
+                            "label":"iTunes Playlists",
+                            "default":"",
+                            "valueChoices":[
+                            ]
+                        },
+                        {
+                            "id":"itunes_shuffle_playlist",
+                            "type": "choice",
+                            "label": "iTunes Shuffle Status",
+                            "default": "Off",
+                            "valueChoices": [
+                                "Off",
+                                "On",
+                            ],
+                        },
+                        {
+                            "id":"itunes_repeat_playlist",
+                            "type": "choice",
+                            "label": "iTunes Repeat Status",
+                            "default": "Off",
+                            "valueChoices": [
+                                "Off",
+                                "Song",
+                                "Playlist",
+                            ],
+                        }
+                    ]
+                }
+            ],
+            "states": [
+                {
+                    "id": "itunes_playing_state",
+                    "type": "choice",
+                    "desc": "iTunes Playing State",
+                    "default": "Stopped",
+                    "valueChoices": [
+                        "Stopped",
+                        "Playing"
+                    ]
+                },
+                {
+                    "id": "itunes_volume",
+                    "type": "text",
+                    "desc": "iTunes Volume",
+                    "default": "100"
+                },
+                {
+                    "id": "itunes_current_track_name",
+                    "type": "text",
+                    "desc": "iTunes Current Track Name",
+                    "default": ""
+                },
+                {
+                    "id": "itunes_current_track_artist",
+                    "type": "text",
+                    "desc": "iTunes Current Track Artist",
+                    "default": ""
+                },
+                {
+                    "id": "itunes_current_track_album",
+                    "type": "text",
+                    "desc": "iTunes Current Track Album",
+                    "default": ""
+                },
+                {
+                    "id": "itunes_current_track_album_artwork",
+                    "type": "text",
+                    "desc": "iTunes Current Track Album Artwork",
+                    "default": ""
+                },
+                {
+                    "id": "itunes_current_track_play_time",
+                    "type": "text",
+                    "desc": "iTunes Current Track Played Time",
+                    "default": ""
+                },
+                {
+                    "id": "itunes_current_track_remaining_time",
+                    "type": "text",
+                    "desc": "iTunes Current Track Time Remaining",
+                    "default": ""
+                },
+                {
+                    "id": "itunes_shuffle",
+                    "type": "choice",
+                    "desc": "iTunes Shuffle Status",
+                    "default": "Off",
+                    "valueChoices": [
+                        "Off",
+                        "On"
+                    ]
+                },
+                {
+                    "id": "itunes_repeat",
+                    "type": "choice",
+                    "desc": "iTunes Repeat Status",
+                    "default": "Off",
+                    "valueChoices": [
+                        "Off",
+                        "Song",
+                        "Playlist"
+                    ]
+                },
+            ],
+            "events": []
+        }
+    ]
+}

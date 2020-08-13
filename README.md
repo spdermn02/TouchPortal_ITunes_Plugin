@@ -25,7 +25,7 @@
 ```
 1️⃣ This has only been tested on Windows 10 64-bit, with latest version of iTunes from Microsoft Store
 2️⃣ There is no guarantee it will work elsewhere
-3️⃣ Apple could mak their COM Interface obsolete at any point with an update, so no guarantees this works forever
+3️⃣ Apple could make their COM Interface obsolete at any point with an update, so no guarantees this works forever
 ```
 ## Setup
 1. Download the TPiTunes.tpp file from [here](https://github.com/spdermn02/TouchPortal_ITunes_Plugin/raw/master/resources/TPiTunes.tpp)
@@ -89,10 +89,10 @@ Here are a few examples, this is not the full list of what you have access to, j
 ![TP iTunes Set Artwork to Button Icon](images/TPiTunes-SetArtworkToIcon.png)
 
 #### Shuffle w/ Time Played
-<img src="images/TPItunes-ShuffleButton.png" height=700 alt="TP iTunes Shuffle with Time Played" />
+<img src="images/TPitunes-ShuffleButton.png" height=700 alt="TP iTunes Shuffle with Time Played" />
 
 #### Volume Up - with Image Changes
-<img src="images/TPItunes-VolumeUpButton.png" height=700 alt="TP iTunes Volume Up - With Image Changes" />
+<img src="images/TPitunes-VolumeUpButton.png" height=700 alt="TP iTunes Volume Up - With Image Changes" />
 
 ## States
 Here are the states that the TPiTunes Plug-in has:

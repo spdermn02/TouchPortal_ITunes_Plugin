@@ -14,6 +14,8 @@
   - [Example Pages](#example-pages)
     - [iTunes Player Clone](#itunes-player-clone)
     - [iTunes Mini Player Clone](#itunes-mini-player-clone)
+  - [Icons](#icons)
+  - [Get iTunes Playlist Images](#get-itunes-playlist-images)
   - [Dependencies](#dependencies)
   - [Versioning](#versioning)
   - [Authors](#authors)
@@ -54,7 +56,7 @@ Depending on your age of your Touch Portal install your configuration file is in
 
 *config.json* is the configuration file, it is in JSON format
 ```javascript
-//  "Off" turns the selectect item off - must restart plugin
+//  "Off" turns the selected item off - must restart plugin
 {
   "artwork": "On", // "On" = if you want Artwork of Current Playing Track sent to Touch Portal, "Off" turns this off - must restart plugin
   "timers": "On"  // "On" = if you want current play time/time left streamed to Touch Portal every second (turning this off will help not fill your log.txt with a bunch of info but you lose this functionality)
@@ -102,18 +104,30 @@ Here are the states that the TPiTunes Plug-in has:
 
 ## Example Pages
 ### iTunes Player Clone
+Download [iTunesFull Page](resources/iTunesFull.tpz)
 ![TP iTunes Player clone](images/TPiTunes-iTunesClone.png)
 
-**TODO**: Bring in .tpz file
-
 ### iTunes Mini Player Clone
+Download: [iTunesMini Page](resources/iTunesMini.tpz)
 ![TP iTunes Mini Player clone](images/TPiTunes-iTunesMiniClone.png)
 
-**TODO**: Bring in .tpz file
+## Icons
+Download [iTunes Icons](reousrces/iTunesIcons.tpi)
+
+
+## Get iTunes Playlist Images
+
+1. Follow this picture in iTunes
+![GetPlaylistImage-Part1](images/GetPlaylistImage-Part1.png)
+2. Open up web browser, and paste the copied link
+![GetPlaylistImage-Part2](images/GetPlaylistImage-Part2.gif)
+3. Save the image
+4. Go To TouchPortal and add the image as an icon to your button
 
 ## Dependencies
 - [touchportal-api](https://www.npmjs.com/package/touchportal-api)
 - [winax](https://www.npmjs.com/package/winax)
+- [remove-accents](https://www.npmjs.com/package/remove-accents)
 
 ## Versioning
 

@@ -1,7 +1,9 @@
 const path = require("path");
 const fs = require("fs");
 const winax = require("winax");
+const removeAccents = require("remove-accents");
 const config = require(path.join(process.argv[2],"/config.json"));
+const playlistRegex = /’/;
 
 var interval = setInterval(function () {
   winax.peekAndDispatchMessages(); // allows ActiveX event to be dispatched
@@ -143,9 +145,11 @@ const getiTunesPlaylists = () => {
   for (let i = 1; i <= playlists.Count; i++) {
     const playlist = playlists.Item[i];
     // TODO: If playlist doesn't exist in index - need to update choiceList for playlists
-    iTunesStates.Playlists.index[playlist.Name] = playlist;
-    playlistNames.push(playlist.Name);
+    const playlistName = removeAccents(playlist.Name.toString().replace(playlistRegex,'\''));
+    iTunesStates.Playlists.index[playlistName] = playlist;
+    playlistNames.push(playlistName);
   }
+
 
   return playlistNames;
 };

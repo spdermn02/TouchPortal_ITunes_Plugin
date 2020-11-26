@@ -2,6 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const winax = require("winax");
 const removeAccents = require("remove-accents");
+const { settings } = require("cluster");
 const config = require(path.join(process.argv[2],"/config.json"));
 const playlistRegex = /’/;
 
@@ -16,7 +17,10 @@ const LIBRARY_TYPE = 1;
 
 const pluginId = "TPiTunes";
 
-let iTunesLibrary = null;
+let heldAction = {};
+let pluginSettings = {};
+
+let iTunesLibrary = undefined;
 let iTunesStates = {
   PlayerState: { id: "itunes_playing_state", value: "" },
   Volume: { id: "itunes_volume", value: "" },
@@ -59,9 +63,13 @@ const getIsPlaying = () => {
 };
 
 const getVolume = () => {
-  let vol = Math.round(iTunes.SoundVolume / 10) * 10;
-  return vol;
+  return iTunes.SoundVolume;
 };
+
+const getRoundVolume = () => {
+    let roundBy = pluginSettings['Volume RoundBy Number'] ? pluginSettings['Volume RoundBy Number'] : 10;
+    return Math.round(iTunes.SoundVolume / roundBy) * roundBy;
+}
 
 const getCurrentTrack = () => {
   return iTunes.CurrentTrack;
@@ -85,11 +93,11 @@ const getCurrentTrackAlbum = () => {
 const getCurrentTrackAlbumArtwork = () => {
   const track = getCurrentTrack();
   if (!track) {
-    return null;
+    return undefined;
   }
   const orig = path.join(process.argv[2], "./album_artwork_temp_orig.png");
   track.Artwork.Item[1].SaveArtworkToFile(orig);
-  let base64data = null;
+  let base64data = undefined;
   let buff = fs.readFileSync(orig);
   base64data = buff.toString("base64");
   return base64data;
@@ -145,7 +153,13 @@ const getiTunesPlaylists = () => {
   for (let i = 1; i <= playlists.Count; i++) {
     const playlist = playlists.Item[i];
     // TODO: If playlist doesn't exist in index - need to update choiceList for playlists
-    const playlistName = removeAccents(playlist.Name.toString().replace(playlistRegex,'\''));
+    //const playlistName = removeAccents(playlist.Name.toString().replace(playlistRegex,'\''));
+    console.log(pluginId,"PlayList Name",playlist.Name);
+    const playlistName = playlist.Name.replace(playlistRegex,'\'');
+    let bufStr = Buffer.from(playlist,"utf-8");
+    let newStr = bufStr.toString("utf-8");
+    console.log(pluginId,"PlayList Name",newStr);
+    console.log(pluginId,"PlayList Name",playlistName);
     iTunesStates.Playlists.index[playlistName] = playlist;
     playlistNames.push(playlistName);
   }
@@ -158,7 +172,7 @@ const initializeStates = async () => {
   getiTunesLibrary();
 
   iTunesStates.PlayerState.value = getIsPlaying();
-  iTunesStates.Volume.value = getVolume() + "";
+  iTunesStates.Volume.value = getRoundVolume() + "";
   iTunesStates.CurrentTrackAlbum.value = getCurrentTrackAlbum();
   iTunesStates.CurrentTrackName.value = getCurrentTrackName();
   iTunesStates.CurrentTrackArtist.value = getCurrentTrackArtist();
@@ -179,7 +193,7 @@ const initializeStates = async () => {
 
   let stateArray = [];
   Object.keys(iTunesStates).forEach((key) => {
-    if (iTunesStates[key].value != null) {
+    if (iTunesStates[key].value != undefined) {
       stateArray.push(iTunesStates[key]);
     }
   });
@@ -211,8 +225,8 @@ const updateStates = () => {
     iTunesStates.PlayerState.value = getIsPlaying();
     stateArray.push(iTunesStates.PlayerState);
   }
-  if (iTunesStates.Volume.value !== getVolume() + "") {
-    iTunesStates.Volume.value = getVolume() + "";
+  if (iTunesStates.Volume.value !== getRoundVolume() + "") {
+    iTunesStates.Volume.value = getRoundVolume() + "";
     stateArray.push(iTunesStates.Volume);
   }
   if (iTunesStates.CurrentTrackName.value !== getCurrentTrackName()) {
@@ -262,20 +276,36 @@ const updateTPClientChoices = (choices) => {
   });
 };
 
-let updateInterval = null;
-TPClient.on("Info", (data) => {
+let updateInterval = undefined;
+TPClient.on("Info", (message) => {
   initializeStates();
   updateInterval = setInterval(() => {
     updateStates();
   }, 1000);
 });
 
+TPClient.on("Settings", (message) => {
+  console.log(pluginId, ": DEBUG : SETTINGS ", JSON.stringify(message));
+  message.forEach( (setting) => {
+    let key = Object.keys(setting)[0];
+    pluginSettings[key] = setting[key];
+  });
+});
+
 TPClient.on("Close", () => {
   clearInterval(updateInterval);
 });
 
-TPClient.on("Action", (message) => {
-  console.log(pluginId, ": DEBUG :", JSON.stringify(message));
+TPClient.on("Action", async (message,hold) => {
+  console.log(pluginId, ": DEBUG : ACTION ", JSON.stringify(message), "hold", hold);
+
+  if( hold ) {
+      heldAction[message.actionId] = true;
+  }
+  else if ( !hold ) {
+      delete heldAction[message.actionId];
+  }
+
   if (message.actionId === "itunes_toggle_play_action") {
     getIsPlaying() == "Playing" ? iTunes.Pause() : iTunes.Play();
   } else if (message.actionId === "itunes_next_track") {
@@ -288,12 +318,26 @@ TPClient.on("Action", (message) => {
   } else if (message.actionId === "itunes_repeat_action") {
     const playlist = getCurrentPlaylist();
     playlist.SongRepeat = (playlist.SongRepeat + 1) % 3;
+  } else if (message.actionId === "itunes_volume_adjust") {
+    let adjustVol = parseInt(message.data[0].value,10);
+    while( hold === undefined || heldAction[message.actionId] ) {
+        const vol = getVolume();
+        let newVol = vol + adjustVol;
+        newVol = newVol < 0 ? 0 : newVol > 100 ? 100 : newVol;
+        iTunes.SoundVolume = newVol;
+        await new Promise(r => setTimeout(r,100));
+        if( hold === undefined || !heldAction[message.actionId] || newVol === 0 || newVol === 100 ) { break; }
+    }
   } else if (message.actionId === "itunes_volume_up") {
     const vol = parseInt(getVolume(), 10);
-    iTunes.SoundVolume = vol < 100 ? vol + 10 : 100;
+    let newVol  = vol + 10;
+    newVol = vol < 100 ? vol : 100;
+    iTunes.SoundVolume = newVol;
   } else if (message.actionId === "itunes_volume_down") {
     const vol = parseInt(getVolume(), 10);
-    iTunes.SoundVolume = vol > 0 ? vol - 10 : 0;
+    let newVol  = vol - 10;
+    newVol = 0 < vol ? vol : 0;
+    iTunes.SoundVolume = newVol;
   } else if (message.actionId === "itunes_play_playlist") {
     if (message.data.length > 0) {
       const playlistName = message.data[0].value;

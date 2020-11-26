@@ -1,7 +1,7 @@
 {
-    "sdk": 2,
-    "version": 1,
-    "TP_iTunes_Version":"1.0.0",
+    "sdk": 3,
+    "version": 2000,
+    "TP_iTunes_Version":"2.0.0",
     "name": "Touch Portal iTunes Plugin",
     "id": "TPiTunes",
     "plugin_start_cmd": "\"%TP_PLUGIN_FOLDER%TPiTunes\\tpitunes.exe\" \"%TP_PLUGIN_FOLDER%TPiTunes\"",
@@ -9,6 +9,15 @@
         "colorDark": "#225834",
         "colorLight": "#45b168"
     },
+    "settings": [
+        {
+            "name": "Volume RoundBy Number",
+            "type": "number",
+            "default": "10",
+            "minValue": 0,
+            "maxValue": 100 
+        }
+    ],
     "categories": [
         {
             "id": "TPiTunes",
@@ -56,6 +65,24 @@
                     "prefix": "iTunes:",
                     "name": "Volume Down - 10",
                     "type": "communicate"
+                },
+                {
+                    "id": "itunes_volume_adjust",
+                    "prefix": "iTunes:",
+                    "name":"iTunes Adjust Volume",
+                    "format": "Adjust Volume by {$itunes_volume_adjust$}",
+                    "tryInline": true,
+                    "type": "communicate",
+                    "hasHoldFunctionality": true,
+                    "data":[
+                        {
+                            "id":"itunes_volume_adjust",
+                            "type":"number",
+                            "label": "value",
+                            "default": 0,
+                            "allowDecimals": false
+                        }
+                    ]
                 },
                 {
                     "id": "itunes_play_playlist",

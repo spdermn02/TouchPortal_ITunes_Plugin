@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "remove-accents": "^0.4.2",
-    "touchportal-api": "^1.0.6",
+    "touchportal-api": "file:D:\\development\\touchportal-node-api\\",
     "winax": "^1.20.0"
   },
   "devDependencies": {}

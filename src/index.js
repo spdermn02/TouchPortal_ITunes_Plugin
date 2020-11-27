@@ -1,7 +1,6 @@
 const path = require("path");
 const fs = require("fs");
 const winax = require("winax");
-const config = require(path.join(process.argv[2],"/config.json"));
 const playlistRegex = /’/;
 
 var interval = setInterval(function () {
@@ -170,7 +169,7 @@ const initializeStates = async () => {
   iTunesStates.CurrentTrackAlbum.value = getCurrentTrackAlbum();
   iTunesStates.CurrentTrackName.value = getCurrentTrackName();
   iTunesStates.CurrentTrackArtist.value = getCurrentTrackArtist();
-  if (config.artwork === "On") {
+  if (pluginSettings["Display Artwork"] === "On") {
     iTunesStates.CurrentTrackAlbumArtwork.value = getCurrentTrackAlbumArtwork();
   }
   iTunesStates.Shuffle.value = getShuffle();
@@ -178,7 +177,7 @@ const initializeStates = async () => {
 
   if (iTunesStates.PlayerState.value === "Playing") {
     //get time here
-    if (config.timers === "On") {
+    if (pluginSettings["Track Timers"] === "On") {
       const [playedTime, remainingTime] = getCurrentTrackPlayTime();
       iTunesStates.CurrentTrackPlayedTime.value = playedTime;
       iTunesStates.CurrentTrackRemainingTime.value = remainingTime;
@@ -233,13 +232,13 @@ const updateStates = () => {
     stateArray.push(iTunesStates.CurrentTrackAlbum);
     stateArray.push(iTunesStates.CurrentTrackName);
     stateArray.push(iTunesStates.CurrentTrackArtist);
-    if (config.artwork === "On") {
+    if (pluginSettings["Display Artwork"] === "On") {
       iTunesStates.CurrentTrackAlbumArtwork.value = getCurrentTrackAlbumArtwork();
       stateArray.push(iTunesStates.CurrentTrackAlbumArtwork);
     }
   }
   if (iTunesStates.PlayerState.value === "Playing") {
-    if (config.timers === "On") {
+    if (pluginSettings["Track Timers"] === "On") {
       //get time here
       const [playedTime, remainingTime] = getCurrentTrackPlayTime();
       iTunesStates.CurrentTrackPlayedTime.value = playedTime;

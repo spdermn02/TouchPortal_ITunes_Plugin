@@ -16,6 +16,18 @@
             "default": "10",
             "minValue": 0,
             "maxValue": 100 
+        },
+        {
+            "name": "Display Artwork",
+            "type": "text",
+            "default": "On",
+            "maxLength": 3
+        },
+        {
+            "name": "Track Timers",
+            "type": "text",
+            "default": "On",
+            "maxLength": 3
         }
     ],
     "categories": [

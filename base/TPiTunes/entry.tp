@@ -55,18 +55,6 @@
                     "type": "communicate"
                 },
                 {
-                    "id": "itunes_volume_up",
-                    "prefix": "iTunes:",
-                    "name": "Volume Up + 10",
-                    "type": "communicate"
-                },
-                {
-                    "id": "itunes_volume_down",
-                    "prefix": "iTunes:",
-                    "name": "Volume Down - 10",
-                    "type": "communicate"
-                },
-                {
                     "id": "itunes_volume_adjust",
                     "prefix": "iTunes:",
                     "name":"iTunes Adjust Volume",

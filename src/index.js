@@ -1,8 +1,6 @@
 const path = require("path");
 const fs = require("fs");
 const winax = require("winax");
-const removeAccents = require("remove-accents");
-const { settings } = require("cluster");
 const config = require(path.join(process.argv[2],"/config.json"));
 const playlistRegex = /’/;
 
@@ -148,24 +146,20 @@ const getRepeat = () => {
 const getiTunesPlaylists = () => {
   const playlists = iTunesLibrary.Playlists;
   let playlistNames = [];
+  let updateNeeded = false;
 
   //Indexing the playlists
   for (let i = 1; i <= playlists.Count; i++) {
     const playlist = playlists.Item[i];
-    // TODO: If playlist doesn't exist in index - need to update choiceList for playlists
-    //const playlistName = removeAccents(playlist.Name.toString().replace(playlistRegex,'\''));
-    console.log(pluginId,"PlayList Name",playlist.Name);
     const playlistName = playlist.Name.replace(playlistRegex,'\'');
-    let bufStr = Buffer.from(playlist,"utf-8");
-    let newStr = bufStr.toString("utf-8");
-    console.log(pluginId,"PlayList Name",newStr);
-    console.log(pluginId,"PlayList Name",playlistName);
-    iTunesStates.Playlists.index[playlistName] = playlist;
+    if( iTunesStates.Playlists.index[playlistName] === undefined ) {
+        iTunesStates.Playlists.index[playlistName] = playlist;
+        updateNeeded = true;
+    }
     playlistNames.push(playlistName);
   }
 
-
-  return playlistNames;
+  return [ updateNeeded, playlistNames ];
 };
 
 const initializeStates = async () => {
@@ -200,18 +194,21 @@ const initializeStates = async () => {
 
   updateTPClientStates(stateArray);
 
-  let choiceArray = [];
-  iTunesStates.Playlists.value = getiTunesPlaylists();
+  updatePlaylists();
+};
 
-  choiceArray.push(iTunesStates.Playlists);
+const updatePlaylists = () => {
 
-  TPClient.choiceUpdateSpecific(
-    iTunesStates.Playlists.id,
-    iTunesStates.Playlists.value,
-    "itunes_play_playlist"
-  );
+  let updateNeeded = false;
+  [updateNeeded, iTunesStates.Playlists.value] = getiTunesPlaylists();
 
-  updateTPClientChoices(choiceArray);
+  if( updateNeeded ) {
+      TPClient.choiceUpdateSpecific(
+        iTunesStates.Playlists.id,
+        iTunesStates.Playlists.value,
+        "itunes_play_playlist"
+      );
+  }
 };
 
 let running = false;
@@ -259,6 +256,7 @@ const updateStates = () => {
     iTunesStates.Repeat.value = getRepeat();
     stateArray.push(iTunesStates.Repeat);
   }
+  updatePlaylists();
 
   if (stateArray.length > 0) {
     updateTPClientStates(stateArray);

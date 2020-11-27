@@ -17,7 +17,6 @@
     "url": "https://github.com/spdermn02/TouchPortal_ITunes_Plugin.git"
   },
   "dependencies": {
-    "remove-accents": "^0.4.2",
     "touchportal-api": "file:D:\\development\\touchportal-node-api\\",
     "winax": "^1.20.0"
   },

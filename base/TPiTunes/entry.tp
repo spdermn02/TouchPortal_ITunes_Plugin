@@ -6,8 +6,8 @@
     "id": "TPiTunes",
     "plugin_start_cmd": "\"%TP_PLUGIN_FOLDER%TPiTunes\\tpitunes.exe\" \"%TP_PLUGIN_FOLDER%TPiTunes\"",
     "configuration": {
-        "colorDark": "#225834",
-        "colorLight": "#45b168"
+        "colorDark": "#23272A",
+        "colorLight": "#CC45F2"
     },
     "settings": [
         {
@@ -70,7 +70,7 @@
                     "id": "itunes_volume_adjust",
                     "prefix": "iTunes:",
                     "name":"iTunes Adjust Volume",
-                    "format": "Adjust Volume by {$itunes_volume_adjust$}",
+                    "format": "Adjust iTunes Volume by {$itunes_volume_adjust$}",
                     "tryInline": true,
                     "type": "communicate",
                     "hasHoldFunctionality": true,

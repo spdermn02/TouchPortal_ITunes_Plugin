@@ -10,7 +10,7 @@
     "start": "node src/index.js",
     "pkg": "pkg .",
     "pkg-win": "pkg --targets node12-win-x64 .",
-    "pkg-mac": "pkg --targets node12-macos-x64 ."
+    "build-win": "pkg --targets node12-win-x64 . && move itunes-win.exe base/TPiTunes/tpitunes.exe && del Resources\\TPiTunes.tpp && cd base && 7z a -tzip ../Resources/TPiTunes.tpp TPiTunes"
   },
   "author": "",
   "license": "GPLv3",
@@ -19,7 +19,7 @@
     "url": "https://github.com/spdermn02/TouchPortal_ITunes_Plugin.git"
   },
   "dependencies": {
-    "touchportal-api": "^2.0.0-alpha",
+    "touchportal-api": "^2.0.1",
     "winax": "^1.20.0"
   }
 }

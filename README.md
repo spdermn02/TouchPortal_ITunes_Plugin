@@ -2,17 +2,18 @@
 
 - [TouchPortal Plugin to Control ITunes](#touchportal-plugin-to-control-itunes)
   - [Notes/Warnings](#noteswarnings)
+  - [Change Log](#change-log)
   - [Setup](#setup)
   - [Configuration](#configuration)
   - [Actions](#actions)
   - [Events](#events)
-    - [Examples](#examples)
-      - [Set the Current Track Album Artwork to Button Icon](#set-the-current-track-album-artwork-to-button-icon)
-      - [Shuffle w/ Time Played](#shuffle-w-time-played)
-      - [Volume Up - with Image Changes](#volume-up---with-image-changes)
+  - [Examples](#examples)
+    - [Set the Current Track Album Artwork to Button Icon](#set-the-current-track-album-artwork-to-button-icon)
+    - [Shuffle w/ Time Played](#shuffle-w-time-played)
+    - [Volume Up - with Image Changes - Shows On Hold Functionality](#volume-up---with-image-changes---shows-on-hold-functionality)
   - [States](#states)
   - [Example Pages](#example-pages)
-    - [iTunes Player Clone](#itunes-player-clone)
+    - [iTunes Player](#itunes-player)
     - [iTunes Mini Player Clone](#itunes-mini-player-clone)
   - [Icons](#icons)
   - [Get iTunes Playlist Images](#get-itunes-playlist-images)
@@ -28,7 +29,22 @@
 1️⃣ This has only been tested on Windows 10 64-bit, with latest version of iTunes from Microsoft Store
 2️⃣ There is no guarantee it will work elsewhere
 3️⃣ Apple could make their COM Interface obsolete at any point with an update, so no guarantees this works forever
+4️⃣ KNOWN ISSUE: playing anything OUTSIDE of your Library will crash the plugin - will work on fix when I can (a simple stop/start in Touch Portal settings will start it back up)
 ```
+
+## Change Log
+2.0.0
+* Updated
+  * TouchPortal-API v2.0.1 update
+  * Updated Sample Images and Pages with all the new actions
+  * Changed Action Color to fit better with iTunes coloring
+* Added
+  * Single Volume Adjustment with OnHold capabilities
+* Deprecated
+  * Individual Volume Changes - This action was removed from being able to be added, but is still supported
+    * Will be removed in a future version
+* Bug Fixes
+  * UTF-8 was added in TPv2.3 and the TouchPortal-API v2.0.1 update so special characters in playlists will not break anymore
 ## Setup
 1. Download the TPiTunes.tpp file from [here](https://github.com/spdermn02/TouchPortal_ITunes_Plugin/raw/master/resources/TPiTunes.tpp)
 1. Import the Plug-in into Touch Portal 
@@ -46,22 +62,12 @@
 1. The plugin should be started now and you should be able to interface to iTunes from Touch Portal - Woohoo!!! (of course, iTunes has to be OPEN to do that)
 
 ## Configuration
-Depending on your age of your Touch Portal install your configuration file is in 
+Configuration now is done inside of Touch Portal<br>
+![TP Plug-In Settings](images/tp_plugin_settings.png)
 
-*%APPDATA%\TouchPortal\plugins\TPiTunes*
-
- or in 
- 
-*%UserProfile%\Documents\TouchPortal\plugins\TPiTunes*
-
-*config.json* is the configuration file, it is in JSON format
-```javascript
-//  "Off" turns the selected item off - must restart plugin
-{
-  "artwork": "On", // "On" = if you want Artwork of Current Playing Track sent to Touch Portal, "Off" turns this off - must restart plugin
-  "timers": "On"  // "On" = if you want current play time/time left streamed to Touch Portal every second (turning this off will help not fill your log.txt with a bunch of info but you lose this functionality)
-}
-```
+* Volume Round By: the value you want to round to for use in displaying slider position (recommend 10)
+* Display Artwork: "On" or "Off" - If you don't plan on displaying the currently playing artwork, turn this Off
+* Track Timers: "On" or "Off" - If you don't plan on displaying the current play time and remaining time, turn this Off
 
 ## Actions
 
@@ -74,26 +80,31 @@ This plug-in offers the following Actions:
 * << Back Track - skips to beginning of current song, or previous track depending on how much of current track has played
 * Shuffle - Toggles Shuffle between Off or On
 * Repeat - Toggles Repat between Off, Repeat Song, Repeat Playlist
-* Volume Up + 10 - Adds 10 to the current volume control IN iTunes (not system)
-* Volume Down - 10 - Subtracts 10 from the current volume control IN iTunes (not system)
+* iTunes Adjust Volume - Adjust iTunes Volume up or down by your defined amount (not system)
+  * Usable in the "On Hold" tab, to adjust your volume by holding down the button - Note: it can adjust very quickly, so beware.
+* *Deprecated* - Volume Up + 10 - Adds 10 to the current volume control IN iTunes (not system)
+* *Deprecated* - Volume Down - 10 - Subtracts 10 from the current volume control IN iTunes (not system)
 * Play iTunes Playlist - allows selection of a playlist to Play, if shuffle should be on or off, and if repeat should be Off/Song/Playlist
+
+_Deprecated_: This action will still work with this version, but may be removed in future versions.  This is no longer an Addable action, but your existing buttons will still work.
 
 ![TP iTunes Play iTunes Playlist Action](images/TPiTunes-PlayPlaylist.png)
 
 ## Events
 There are no events directly tied to this plugin. You will be using the built in "When plug-in state changes" event to determine when states are updated from the plugin back to Touch Portal.
 
-### Examples
+## Examples
 
 Here are a few examples, this is not the full list of what you have access to, just examples
 
-#### Set the Current Track Album Artwork to Button Icon
+### Set the Current Track Album Artwork to Button Icon
 ![TP iTunes Set Artwork to Button Icon](images/TPiTunes-SetArtworkToIcon.png)
 
-#### Shuffle w/ Time Played
+### Shuffle w/ Time Played
 <img src="images/TPiTunes-ShuffleButton.png" height=700 alt="TP iTunes Shuffle with Time Played" />
 
-#### Volume Up - with Image Changes
+### Volume Up - with Image Changes - Shows On Hold Functionality
+**Note**: There is a bug in the image, that will be fixed when Touch Portal fixes their side.<br>
 <img src="images/TPiTunes-VolumeUpButton.png" height=700 alt="TP iTunes Volume Up - With Image Changes" />
 
 ## States
@@ -103,9 +114,9 @@ Here are the states that the TPiTunes Plug-in has:
 
 
 ## Example Pages
-### iTunes Player Clone
+### iTunes Player
 Download [iTunesFull Page](resources/iTunesFull.tpz)
-![TP iTunes Player clone](images/TPiTunes-iTunesClone.png)
+![TP iTunes Player](images/TPiTunes-iTunesClone.png)
 
 ### iTunes Mini Player Clone
 Download: [iTunesMini Page](resources/iTunesMini.tpz)
@@ -127,7 +138,6 @@ Download [iTunes Icons](reousrces/iTunesIcons.tpi)
 ## Dependencies
 - [touchportal-api](https://www.npmjs.com/package/touchportal-api)
 - [winax](https://www.npmjs.com/package/winax)
-- [remove-accents](https://www.npmjs.com/package/remove-accents)
 
 ## Versioning
 

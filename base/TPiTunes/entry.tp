@@ -1,14 +1,35 @@
 {
-    "sdk": 2,
-    "version": 1,
-    "TP_iTunes_Version":"1.0.0",
+    "sdk": 3,
+    "version": 2000,
+    "TP_iTunes_Version":"2.0.0",
     "name": "Touch Portal iTunes Plugin",
     "id": "TPiTunes",
     "plugin_start_cmd": "\"%TP_PLUGIN_FOLDER%TPiTunes\\tpitunes.exe\" \"%TP_PLUGIN_FOLDER%TPiTunes\"",
     "configuration": {
-        "colorDark": "#225834",
-        "colorLight": "#45b168"
+        "colorDark": "#23272A",
+        "colorLight": "#CC45F2"
     },
+    "settings": [
+        {
+            "name": "Volume RoundBy Number",
+            "type": "number",
+            "default": "10",
+            "minValue": 0,
+            "maxValue": 100 
+        },
+        {
+            "name": "Display Artwork",
+            "type": "text",
+            "default": "On",
+            "maxLength": 3
+        },
+        {
+            "name": "Track Timers",
+            "type": "text",
+            "default": "On",
+            "maxLength": 3
+        }
+    ],
     "categories": [
         {
             "id": "TPiTunes",
@@ -46,16 +67,22 @@
                     "type": "communicate"
                 },
                 {
-                    "id": "itunes_volume_up",
+                    "id": "itunes_volume_adjust",
                     "prefix": "iTunes:",
-                    "name": "Volume Up + 10",
-                    "type": "communicate"
-                },
-                {
-                    "id": "itunes_volume_down",
-                    "prefix": "iTunes:",
-                    "name": "Volume Down - 10",
-                    "type": "communicate"
+                    "name":"iTunes Adjust Volume",
+                    "format": "Adjust iTunes Volume by {$itunes_volume_adjust$}",
+                    "tryInline": true,
+                    "type": "communicate",
+                    "hasHoldFunctionality": true,
+                    "data":[
+                        {
+                            "id":"itunes_volume_adjust",
+                            "type":"number",
+                            "label": "value",
+                            "default": 0,
+                            "allowDecimals": false
+                        }
+                    ]
                 },
                 {
                     "id": "itunes_play_playlist",

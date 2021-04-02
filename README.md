@@ -33,6 +33,9 @@
 ```
 
 ## Change Log
+2.0.1
+* Bug Fix
+  * Fixed Volume adjust to recognize being in On Press section of Button
 2.0.0
 * Updated
   * TouchPortal-API v2.0.1 update

@@ -19,7 +19,7 @@
     "url": "https://github.com/spdermn02/TouchPortal_ITunes_Plugin.git"
   },
   "dependencies": {
-    "touchportal-api": "^2.0.1",
+    "touchportal-api": "^3.0.0",
     "winax": "^1.20.0"
   }
 }

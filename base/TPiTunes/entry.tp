@@ -1,7 +1,7 @@
 {
-    "sdk": 3,
-    "version": 2000,
-    "TP_iTunes_Version":"2.0.0",
+    "sdk": 4,
+    "version": 3000,
+    "TP_iTunes_Version":"3.0.0",
     "name": "Touch Portal iTunes Plugin",
     "id": "TPiTunes",
     "plugin_start_cmd": "\"%TP_PLUGIN_FOLDER%TPiTunes\\tpitunes.exe\" \"%TP_PLUGIN_FOLDER%TPiTunes\"",
@@ -35,6 +35,14 @@
             "id": "TPiTunes",
             "name": "iTunes",
             "imagepath": "%TP_PLUGIN_FOLDER%TPiTunes/iTunes-24x24.png",
+            "connectors":[
+                {
+                    "id": "itunes_volume_adjust_connector",
+                    "prefix": "iTunes:",
+                    "name":"iTunes Adjust Volume",
+                    "format":"iTunes: Control the Volume"
+                }
+            ],
             "actions": [
                 {
                     "id": "itunes_toggle_play_action",

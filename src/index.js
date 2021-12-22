@@ -19,26 +19,30 @@ let pluginSettings = {};
 
 let iTunesLibrary = undefined;
 let iTunesStates = {
-  PlayerState: { id: "itunes_playing_state", value: "" },
-  Volume: { id: "itunes_volume", value: "" },
-  CurrentTrackAlbum: { id: "itunes_current_track_album", value: "" },
-  CurrentTrackName: { id: "itunes_current_track_name", value: "" },
-  CurrentTrackArtist: { id: "itunes_current_track_artist", value: "" },
+  PlayerState: { id: "itunes_playing_state", value: "", type: "default" },
+  Volume: { id: "itunes_volume", value: "", type: "default" },
+  VolumeConnector: { id:"itunes_volume_connector", value: "", type: "connector"},
+  CurrentTrackAlbum: { id: "itunes_current_track_album", value: "", type: "default" },
+  CurrentTrackName: { id: "itunes_current_track_name", value: "", type: "default" },
+  CurrentTrackArtist: { id: "itunes_current_track_artist", value: "", type: "default" },
   CurrentTrackAlbumArtwork: {
     id: "itunes_current_track_album_artwork",
-    value: "",
+    value: "", 
+    type: "default"
   },
   CurrentTrackPlayedTime: {
     id: "itunes_current_track_play_time",
     value: "0:00",
+    type: "default"
   },
   CurrentTrackRemainingTime: {
     id: "itunes_current_track_remaining_time",
     value: "0:00",
+    type: "default"
   },
-  Repeat: { id: "itunes_repeat", value: "Off" },
-  Shuffle: { id: "itunes_shuffle", value: "Off" },
-  Playlists: { id: "itunes_playlists", valueChoices: [], index: {} },
+  Repeat: { id: "itunes_repeat", value: "Off", type: "default"},
+  Shuffle: { id: "itunes_shuffle", value: "Off", type: "default" },
+  Playlists: { id: "itunes_playlists", valueChoices: [], index: {}, type: "choices" },
 };
 
 const getiTunesLibrary = () => {
@@ -166,6 +170,7 @@ const initializeStates = async () => {
 
   iTunesStates.PlayerState.value = getIsPlaying();
   iTunesStates.Volume.value = getRoundVolume() + "";
+  iTunesStates.VolumeConnector.value = iTunesStates.Volume.value;
   iTunesStates.CurrentTrackAlbum.value = getCurrentTrackAlbum();
   iTunesStates.CurrentTrackName.value = getCurrentTrackName();
   iTunesStates.CurrentTrackArtist.value = getCurrentTrackArtist();
@@ -185,13 +190,18 @@ const initializeStates = async () => {
   }
 
   let stateArray = [];
+  let connectorArray = [];
   Object.keys(iTunesStates).forEach((key) => {
-    if (iTunesStates[key].value != undefined) {
+    if (iTunesStates[key].value != undefined && iTunesStates[key].type == "default" ) {
       stateArray.push(iTunesStates[key]);
+    }
+    if( iTunesStates[key].value != undefined && iTunesStates[key].type == "connector" ) {
+      connectorArray.push({id:iTunesStates[key].id, value: iTunesStates[key].value, data: iTunesStates[key].data });
     }
   });
 
   updateTPClientStates(stateArray);
+  updateTPClientConnectors(connectorArray);
 
   updatePlaylists();
 };
@@ -199,12 +209,12 @@ const initializeStates = async () => {
 const updatePlaylists = () => {
 
   let updateNeeded = false;
-  [updateNeeded, iTunesStates.Playlists.value] = getiTunesPlaylists();
+  [updateNeeded, iTunesStates.Playlists.valueChoices] = getiTunesPlaylists();
 
   if( updateNeeded ) {
       TPClient.choiceUpdateSpecific(
         iTunesStates.Playlists.id,
-        iTunesStates.Playlists.value,
+        iTunesStates.Playlists.valueChoices,
         "itunes_play_playlist"
       );
   }
@@ -218,13 +228,16 @@ const updateStates = (resend = false ) => {
   console.log(pluginId, ": DEBUG : updateStates", `resend ${resend} running ${running}`);
   running = true;
   let stateArray = [];
+  let connectorArray = []''
   if (resend || iTunesStates.PlayerState.value !== getIsPlaying()) {
     iTunesStates.PlayerState.value = getIsPlaying();
     stateArray.push(iTunesStates.PlayerState);
   }
   if (resend || iTunesStates.Volume.value !== getRoundVolume() + "") {
     iTunesStates.Volume.value = getRoundVolume() + "";
+    iTunesStates.VolumeConnector.value = iTunesStates.Volume.value;
     stateArray.push(iTunesStates.Volume);
+    connectorArray.push(iTunesStates.VolumeConnector);
   }
   if (resend || iTunesStates.CurrentTrackName.value !== getCurrentTrackName()) {
     iTunesStates.CurrentTrackAlbum.value = getCurrentTrackAlbum();
@@ -302,6 +315,7 @@ TPClient.on("Broadcast", () => {
 
 TPClient.on("Action", async (message,hold) => {
   console.log(pluginId, ": DEBUG : ACTION ", JSON.stringify(message), "hold", hold);
+  let forceStateUpdate = false;
 
   if( hold ) {
       heldAction[message.actionId] = true;
@@ -312,6 +326,7 @@ TPClient.on("Action", async (message,hold) => {
 
   if (message.actionId === "itunes_toggle_play_action") {
     getIsPlaying() == "Playing" ? iTunes.Pause() : iTunes.Play();
+    forceStateUpdate = true;
   } else if (message.actionId === "itunes_next_track") {
     iTunes.NextTrack();
   } else if (message.actionId === "itunes_back_track") {
@@ -359,7 +374,23 @@ TPClient.on("Action", async (message,hold) => {
     }
   }
 
-  updateStates();
+  updateStates(forceStateUpdate);
+});
+
+TPClient.on("ConnectorChange",(message) => {
+  logIt('INFO',`Connector change event fired `+JSON.stringify(message));
+  // {"data":[{"id":"streamraiders_volume_type_connector","value":"Music"}],"pluginId":"Touch Portal Stream Raiders","connectorId":"streamraiders_volume_connector","type":"connectorChange","value":42}
+  const action = message.connectorId.replace('_connector','');
+  logIt("INFO",`calling action ${action}`);
+  if( action == 'itunes_volume_adjust' ) {
+      let newVol = parseInt(message.value,10);
+      iTunes.SoundVolume = newVol;
+  }
+  else {
+      logIt("ERROR",`Unknown action called ${action}`);
+  }
+
+  updateStates(false);
 });
 
 TPClient.connect({ pluginId });

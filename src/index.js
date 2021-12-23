@@ -21,7 +21,7 @@ let iTunesLibrary = undefined;
 let iTunesStates = {
   PlayerState: { id: "itunes_playing_state", value: "", type: "default" },
   Volume: { id: "itunes_volume", value: "", type: "default" },
-  VolumeConnector: { id:"itunes_volume_connector", value: "", type: "connector"},
+  VolumeConnector: { id:"itunes_volume_adjust_connector", value: "", type: "connector"},
   CurrentTrackAlbum: { id: "itunes_current_track_album", value: "", type: "default" },
   CurrentTrackName: { id: "itunes_current_track_name", value: "", type: "default" },
   CurrentTrackArtist: { id: "itunes_current_track_artist", value: "", type: "default" },
@@ -170,7 +170,7 @@ const initializeStates = async () => {
 
   iTunesStates.PlayerState.value = getIsPlaying();
   iTunesStates.Volume.value = getRoundVolume() + "";
-  iTunesStates.VolumeConnector.value = iTunesStates.Volume.value;
+  iTunesStates.VolumeConnector.value = getVolume() + "";
   iTunesStates.CurrentTrackAlbum.value = getCurrentTrackAlbum();
   iTunesStates.CurrentTrackName.value = getCurrentTrackName();
   iTunesStates.CurrentTrackArtist.value = getCurrentTrackArtist();
@@ -228,14 +228,14 @@ const updateStates = (resend = false ) => {
   console.log(pluginId, ": DEBUG : updateStates", `resend ${resend} running ${running}`);
   running = true;
   let stateArray = [];
-  let connectorArray = []''
+  let connectorArray = [];
   if (resend || iTunesStates.PlayerState.value !== getIsPlaying()) {
     iTunesStates.PlayerState.value = getIsPlaying();
     stateArray.push(iTunesStates.PlayerState);
   }
-  if (resend || iTunesStates.Volume.value !== getRoundVolume() + "") {
+  if (resend || iTunesStates.VolumeConnector.value !== getVolume() + "") {
     iTunesStates.Volume.value = getRoundVolume() + "";
-    iTunesStates.VolumeConnector.value = iTunesStates.Volume.value;
+    iTunesStates.VolumeConnector.value = getVolume() + "";
     stateArray.push(iTunesStates.Volume);
     connectorArray.push(iTunesStates.VolumeConnector);
   }
@@ -274,11 +274,18 @@ const updateStates = (resend = false ) => {
   if (stateArray.length > 0) {
     updateTPClientStates(stateArray);
   }
+  if( connectorArray.length > 0 ) {
+    updateTPClientConnectors(connectorArray);
+  }
   running = false;
 };
 
 const updateTPClientStates = (states) => {
   TPClient.stateUpdateMany(states);
+};
+
+const updateTPClientConnectors = (connectors) => {
+  TPClient.connectorUpdateMany(connectors);
 };
 
 const updateTPClientChoices = (choices) => {
@@ -378,16 +385,16 @@ TPClient.on("Action", async (message,hold) => {
 });
 
 TPClient.on("ConnectorChange",(message) => {
-  logIt('INFO',`Connector change event fired `+JSON.stringify(message));
+  console.log(pluginId, ": DEBUG :",`Connector change event fired `+JSON.stringify(message));
   // {"data":[{"id":"streamraiders_volume_type_connector","value":"Music"}],"pluginId":"Touch Portal Stream Raiders","connectorId":"streamraiders_volume_connector","type":"connectorChange","value":42}
   const action = message.connectorId.replace('_connector','');
-  logIt("INFO",`calling action ${action}`);
+  console.log(pluginId, ": DEBUG : ",`calling action ${action}`);
   if( action == 'itunes_volume_adjust' ) {
       let newVol = parseInt(message.value,10);
       iTunes.SoundVolume = newVol;
   }
   else {
-      logIt("ERROR",`Unknown action called ${action}`);
+    console.log(pluginId, ": ERROR : ",`Unknown action called ${action}`);
   }
 
   updateStates(false);

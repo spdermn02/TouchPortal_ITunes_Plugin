@@ -10,7 +10,7 @@
     "start": "node src/index.js",
     "pkg": "pkg .",
     "pkg-win": "pkg --targets node16-win-x64 .",
-    "build-win": "pkg --targets node16-win-x64 . && move itunes-win.exe base/TPiTunes/tpitunes.exe && copy node_modules\\winax\\build\\Release\\node_activex.node base\\TPiTunes\\node_activex.node && del Resources\\TPiTunes.tpp && cd base && 7z a -tzip ../Resources/TPiTunes.tpp TPiTunes && del TpiTunes\\tpitunes.exe && del TPiTunes\\node_activex.node"
+    "build-win": "pkg --targets node16-win-x64 . && move itunes-win.exe base/TPiTunes/tpitunes.exe && copy node_modules\\winax\\build\\Release\\node_activex.node base\\TPiTunes\\node_activex.node && del Installers\\TPiTunes.tpp && cd base && 7z a -tzip ../Installers/TPiTunes.tpp TPiTunes && del TpiTunes\\tpitunes.exe && del TPiTunes\\node_activex.node"
   },
   "author": "",
   "license": "GPLv3",

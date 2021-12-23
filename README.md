@@ -3,6 +3,9 @@
 - [TouchPortal Plugin to Control ITunes](#touchportal-plugin-to-control-itunes)
   - [Notes/Warnings](#noteswarnings)
   - [Change Log](#change-log)
+    - [2.0.1](#201)
+    - [2.0.0](#200)
+    - [3.0.0](#300)
   - [Setup](#setup)
   - [Configuration](#configuration)
   - [Actions](#actions)
@@ -11,6 +14,7 @@
     - [Set the Current Track Album Artwork to Button Icon](#set-the-current-track-album-artwork-to-button-icon)
     - [Shuffle w/ Time Played](#shuffle-w-time-played)
     - [Volume Up - with Image Changes - Shows On Hold Functionality](#volume-up---with-image-changes---shows-on-hold-functionality)
+    - [Volume Slider](#volume-slider)
   - [States](#states)
   - [Example Pages](#example-pages)
     - [iTunes Player](#itunes-player)
@@ -33,10 +37,12 @@
 ```
 
 ## Change Log
-2.0.1
+
+### 2.0.1
 * Bug Fix
   * Fixed Volume adjust to recognize being in On Press section of Button
-2.0.0
+  
+### 2.0.0
 * Updated
   * TouchPortal-API v2.0.1 update
   * Updated Sample Images and Pages with all the new actions
@@ -48,6 +54,20 @@
     * Will be removed in a future version
 * Bug Fixes
   * UTF-8 was added in TPv2.3 and the TouchPortal-API v2.0.1 update so special characters in playlists will not break anymore
+  
+### 3.0.0
+* Added
+  * Slider Action for Volume - syncs with application
+  * on Play/Pause all states are updated including Album Art
+  * on Page Change in Touch Portal, broadcast event forces all states to update back to Touch Portal
+* Updated
+  * Upgraded to touchportal-api 3.0.0
+* Examples
+  * Updated example Pages with slider control instead of image based volume control
+  * Added downloadable slider button for volume by itself
+* Hint
+  * If you want raw single digit volume, change the Volume Round By setting to 1
+
 ## Setup
 1. Download the TPiTunes.tpp file from [here](https://github.com/spdermn02/TouchPortal_ITunes_Plugin/raw/master/resources/TPiTunes.tpp)
 1. Import the Plug-in into Touch Portal 
@@ -68,7 +88,7 @@
 Configuration now is done inside of Touch Portal<br>
 ![TP Plug-In Settings](images/tp_plugin_settings.png)
 
-* Volume Round By: the value you want to round to for use in displaying slider position (recommend 10)
+* Volume Round By: the value you want to round to for use in displaying slider position (recommend 10) - if you want the single digit value - change to 1
 * Display Artwork: "On" or "Off" - If you don't plan on displaying the currently playing artwork, turn this Off
 * Track Timers: "On" or "Off" - If you don't plan on displaying the current play time and remaining time, turn this Off
 
@@ -110,6 +130,13 @@ Here are a few examples, this is not the full list of what you have access to, j
 **Note**: There is a bug in the image, that will be fixed when Touch Portal fixes their side.<br>
 <img src="images/TPiTunes-VolumeUpButton.png" height=700 alt="TP iTunes Volume Up - With Image Changes" />
 
+### Volume Slider
+New to Touch Portal 3.0.0 is Sliders, and the iTunes Plugin supports the Volume now as a slider control
+Designed with iTunes styling.
+<img src="images/TPiTunes-Volume-Slider.png" alt="TP iTunes Volume Slider" />
+
+Download [TP Volume Slider](resources/iTunes-Volume-Sideways-Slider.tpb)
+
 ## States
 Here are the states that the TPiTunes Plug-in has:
 
@@ -118,11 +145,13 @@ Here are the states that the TPiTunes Plug-in has:
 
 ## Example Pages
 ### iTunes Player
-Download [iTunesFull Page](resources/iTunesFull.tpz)
+3.0.0 Updated with Slider
+Download [iTunesFull Page](resources/TPiTunes-Full-3.0.0Update.tpz)
 ![TP iTunes Player](images/TPiTunes-iTunesClone.png)
 
 ### iTunes Mini Player Clone
-Download: [iTunesMini Page](resources/iTunesMini.tpz)
+3.0.0 Updated with Slider
+Download: [iTunesMini Page](resources/TPiTunes-Mini-3.0.0Update.tpz)
 ![TP iTunes Mini Player clone](images/TPiTunes-iTunesMiniClone.png)
 
 ## Icons

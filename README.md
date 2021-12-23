@@ -65,6 +65,8 @@
 * Examples
   * Updated example Pages with slider control instead of image based volume control
   * Added downloadable slider button for volume by itself
+* Hint
+  * If you want raw single digit volume, change the Volume Round By setting to 1
 
 ## Setup
 1. Download the TPiTunes.tpp file from [here](https://github.com/spdermn02/TouchPortal_ITunes_Plugin/raw/master/resources/TPiTunes.tpp)
@@ -86,7 +88,7 @@
 Configuration now is done inside of Touch Portal<br>
 ![TP Plug-In Settings](images/tp_plugin_settings.png)
 
-* Volume Round By: the value you want to round to for use in displaying slider position (recommend 10)
+* Volume Round By: the value you want to round to for use in displaying slider position (recommend 10) - if you want the single digit value - change to 1
 * Display Artwork: "On" or "Off" - If you don't plan on displaying the currently playing artwork, turn this Off
 * Track Timers: "On" or "Off" - If you don't plan on displaying the current play time and remaining time, turn this Off
 

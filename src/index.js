@@ -93,16 +93,24 @@ const getCurrentTrackAlbum = () => {
 
 const getCurrentTrackAlbumArtwork = () => {
   const track = getCurrentTrack();
-  let base64data = undefined;
+  let error = false;
   if (!track) {
     return undefined;
   }
   const orig = path.join(process.argv[2], "./album_artwork_temp_orig.png");
-  if( track.Album && Array.isArray(track.Album.Item) && track.Album.Item.length >= 2 && track.Album.Item[1] ) {
+  try {
     track.Artwork.Item[1].SaveArtworkToFile(orig);
-    let buff = fs.readFileSync(orig);
-    base64data = buff.toString("base64");
   }
+  catch(e) {
+    logIt("ERROR", "Fetching artwork failed", e.message)
+    error = true;
+  }
+  if( error ) {
+    return undefined;
+  }
+  let base64data = undefined;
+  let buff = fs.readFileSync(orig);
+  base64data = buff.toString("base64");
   return base64data;
 };
 

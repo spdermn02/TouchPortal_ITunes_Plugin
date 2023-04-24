@@ -1,6 +1,6 @@
 {
   "name": "itunes-win",
-  "version": "3.0.1-beta",
+  "version": "3.0.1-beta-1",
   "description": "",
   "bin": {
     "itunes-win": "src/index.js"

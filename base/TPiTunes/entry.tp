@@ -1,7 +1,7 @@
 {
     "sdk": 4,
     "version": 3000,
-    "TP_iTunes_Version":"3.0.0",
+    "TP_iTunes_Version":"3.0.1-beta-1",
     "name": "Touch Portal iTunes Plugin",
     "id": "TPiTunes",
     "plugin_start_cmd": "\"%TP_PLUGIN_FOLDER%TPiTunes\\tpitunes.exe\" \"%TP_PLUGIN_FOLDER%TPiTunes\"",

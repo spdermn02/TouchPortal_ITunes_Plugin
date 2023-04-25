@@ -91,7 +91,7 @@ const getCurrentTrackAlbum = () => {
   return track ? track.Album : "";
 };
 
-const getCurrentTrackAlbumArtwork = async () => {
+const getCurrentTrackAlbumArtwork = () => {
   const track = getCurrentTrack();
   if (!track) {
     return undefined;

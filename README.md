@@ -3,9 +3,10 @@
 - [TouchPortal Plugin to Control ITunes](#touchportal-plugin-to-control-itunes)
   - [Notes/Warnings](#noteswarnings)
   - [Change Log](#change-log)
+    - [3.0.1](#301)
+    - [3.0.0](#300)
     - [2.0.1](#201)
     - [2.0.0](#200)
-    - [3.0.0](#300)
   - [Setup](#setup)
   - [Configuration](#configuration)
   - [Actions](#actions)
@@ -33,11 +34,28 @@
 1️⃣ This has only been tested on Windows 10 64-bit, with latest version of iTunes from Microsoft Store
 2️⃣ There is no guarantee it will work elsewhere
 3️⃣ Apple could make their COM Interface obsolete at any point with an update, so no guarantees this works forever
-4️⃣ KNOWN ISSUE: playing anything OUTSIDE of your Library will crash the plugin - will work on fix when I can (a simple stop/start in Touch Portal settings will start it back up)
 ```
 
 ## Change Log
 
+### 3.0.1
+* Bug Fixes
+  * [#3](https://github.com/spdermn02/TouchPortal_ITunes_Plugin/issues/3) - Fixed this bug so now the plugin doesn't crash playing things outside of your library
+  * Fixed issue with local missing artwork on a file not causing plugin to crash, instead an empty album art will be sent back (when setting is on to enable artwork)
+  
+### 3.0.0
+* Added
+  * Slider Action for Volume - syncs with application
+  * on Play/Pause all states are updated including Album Art
+  * on Page Change in Touch Portal, broadcast event forces all states to update back to Touch Portal
+* Updated
+  * Upgraded to touchportal-api 3.0.0
+* Examples
+  * Updated example Pages with slider control instead of image based volume control
+  * Added downloadable slider button for volume by itself
+* Hint
+  * If you want raw single digit volume, change the Volume Round By setting to 1
+  
 ### 2.0.1
 * Bug Fix
   * Fixed Volume adjust to recognize being in On Press section of Button
@@ -55,18 +73,9 @@
 * Bug Fixes
   * UTF-8 was added in TPv2.3 and the TouchPortal-API v2.0.1 update so special characters in playlists will not break anymore
   
-### 3.0.0
-* Added
-  * Slider Action for Volume - syncs with application
-  * on Play/Pause all states are updated including Album Art
-  * on Page Change in Touch Portal, broadcast event forces all states to update back to Touch Portal
-* Updated
-  * Upgraded to touchportal-api 3.0.0
-* Examples
-  * Updated example Pages with slider control instead of image based volume control
-  * Added downloadable slider button for volume by itself
-* Hint
-  * If you want raw single digit volume, change the Volume Round By setting to 1
+
+
+
 
 ## Setup
 1. Download the TPiTunes.tpp file from [here](https://github.com/spdermn02/TouchPortal_ITunes_Plugin/raw/master/resources/TPiTunes.tpp)
@@ -91,6 +100,8 @@ Configuration now is done inside of Touch Portal<br>
 * Volume Round By: the value you want to round to for use in displaying slider position (recommend 10) - if you want the single digit value - change to 1
 * Display Artwork: "On" or "Off" - If you don't plan on displaying the currently playing artwork, turn this Off
 * Track Timers: "On" or "Off" - If you don't plan on displaying the current play time and remaining time, turn this Off
+
+If you would like to customize your empty album art to be something unique for you, just replace the file in %APPDATA%\TouchPortal\plugins\TPiTunes called empty_album_art.jpg (just use a 256x256 size image for best results). Future release will allow for automatic lookup of the album artwork from the Apple Music Web API, and only use this if nothing can be found there.
 
 ## Actions
 

@@ -3,7 +3,7 @@ const fs = require("fs");
 const winax = require("winax");
 const playlistRegex = /’/;
 
-var interval = setInterval(function () {
+const interval = setInterval(function () {
   winax.peekAndDispatchMessages(); // allows ActiveX event to be dispatched
 }, 50);
 const TPClient = new (require("touchportal-api").Client)();
@@ -91,13 +91,19 @@ const getCurrentTrackAlbum = () => {
   return track ? track.Album : "";
 };
 
-const getCurrentTrackAlbumArtwork = () => {
+const getCurrentTrackAlbumArtwork = async () => {
   const track = getCurrentTrack();
   if (!track) {
     return undefined;
   }
-  const orig = path.join(process.argv[2], "./album_artwork_temp_orig.png");
-  track.Artwork.Item[1].SaveArtworkToFile(orig);
+  let orig = path.join(process.argv[2], "./album_artwork_temp_orig.png");
+  try {
+    track.Artwork.Item[1].SaveArtworkToFile(orig);
+  }
+  catch(e) {
+    console.log(pluginId, ": ERROR :", "Local lookup of artwork failed", e.message)
+    orig = path.join(process.argv[2], "./empty_album_art.jpg");
+  }
   let base64data = undefined;
   let buff = fs.readFileSync(orig);
   base64data = buff.toString("base64");
@@ -147,22 +153,27 @@ const getRepeat = () => {
 };
 
 const getiTunesPlaylists = () => {
-  const playlists = iTunesLibrary.Playlists;
-  let playlistNames = [];
-  let updateNeeded = false;
+  try {
+    const playlists = iTunesLibrary.Playlists;
+    let playlistNames = [];
+    let updateNeeded = false;
 
-  //Indexing the playlists
-  for (let i = 1; i <= playlists.Count; i++) {
-    const playlist = playlists.Item[i];
-    const playlistName = playlist.Name.replace(playlistRegex,'\'');
-    if( iTunesStates.Playlists.index[playlistName] === undefined ) {
-        iTunesStates.Playlists.index[playlistName] = playlist;
-        updateNeeded = true;
+    //Indexing the playlists
+    for (let i = 1; i <= playlists.Count; i++) {
+      const playlist = playlists.Item[i];
+      const playlistName = playlist.Name.replace(playlistRegex,'\'');
+      if( iTunesStates.Playlists.index[playlistName] === undefined ) {
+          iTunesStates.Playlists.index[playlistName] = playlist;
+          updateNeeded = true;
+      }
+      playlistNames.push(playlistName);
     }
-    playlistNames.push(playlistName);
-  }
 
-  return [ updateNeeded, playlistNames ];
+    return [ updateNeeded, playlistNames ];
+  }
+  catch( err ) {
+    console.log(pluginId, ": WARN : Could not read playlists, most likely due to not being in own library", err.message)
+  }
 };
 
 const initializeStates = async () => {

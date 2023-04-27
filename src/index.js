@@ -236,7 +236,6 @@ const updateStates = (resend = false ) => {
   if (running) {
     return;
   }
-  console.log(pluginId, ": DEBUG : updateStates", `resend ${resend} running ${running}`);
   running = true;
   let stateArray = [];
   let connectorArray = [];

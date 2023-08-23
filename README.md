@@ -3,6 +3,7 @@
 - [TouchPortal Plugin to Control ITunes](#touchportal-plugin-to-control-itunes)
   - [Notes/Warnings](#noteswarnings)
   - [Change Log](#change-log)
+    - [3.0.2](#302)
     - [3.0.1](#301)
     - [3.0.0](#300)
     - [2.0.1](#201)
@@ -37,6 +38,10 @@
 ```
 
 ## Change Log
+
+### 3.0.2
+* Added
+  * State to hold the percentage played of the current track
 
 ### 3.0.1
 * Bug Fixes

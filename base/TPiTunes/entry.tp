@@ -1,7 +1,7 @@
 {
     "sdk": 4,
-    "version": 3001,
-    "TP_iTunes_Version":"3.0.1",
+    "version": 3002,
+    "TP_iTunes_Version":"3.0.2",
     "name": "Touch Portal iTunes Plugin",
     "id": "TPiTunes",
     "plugin_start_cmd": "\"%TP_PLUGIN_FOLDER%TPiTunes\\tpitunes.exe\" \"%TP_PLUGIN_FOLDER%TPiTunes\"",
@@ -172,6 +172,12 @@
                     "type": "text",
                     "desc": "iTunes Current Track Album Artwork",
                     "default": ""
+                },
+                {
+                    "id": "itunes_current_track_percentage_played",
+                    "type": "text",
+                    "desc": "iTunes Current Track Percentage Played",
+                    "default": "0"
                 },
                 {
                     "id": "itunes_current_track_play_time",

@@ -30,6 +30,11 @@ let iTunesStates = {
     value: "", 
     type: "default"
   },
+  CurrentTrackPercentagePlayed: {
+    id: "itunes_current_track_percentage_played",
+    value: 0,
+    type: "default"
+  },
   CurrentTrackPlayedTime: {
     id: "itunes_current_track_play_time",
     value: "0:00",
@@ -118,6 +123,7 @@ const getCurrentTrackPlayTime = () => {
   let playerPosition = getPlayerPosition();
   let currentTrack = getCurrentTrack();
   let trackDuration = currentTrack.Duration;
+  const percentagePlayed = Math.floor((playerPosition / trackDuration) * 100);
 
   const sec_per_min = 60;
   const playedMins = Math.floor(playerPosition / sec_per_min);
@@ -133,7 +139,7 @@ const getCurrentTrackPlayTime = () => {
     ":" +
     (remainingSec < 10 ? `0${remainingSec}` : remainingSec);
 
-  return [playedTime, remainingTime];
+  return [percentagePlayed, playedTime, remainingTime];
 };
 
 const getCurrentPlaylist = () => {
@@ -194,7 +200,8 @@ const initializeStates = async () => {
   if (iTunesStates.PlayerState.value === "Playing") {
     //get time here
     if (pluginSettings["Track Timers"] === "On") {
-      const [playedTime, remainingTime] = getCurrentTrackPlayTime();
+      const [percentagePlayed, playedTime, remainingTime] = getCurrentTrackPlayTime();
+      iTunesStates.CurrentTrackPercentagePlayed.value = percentagePlayed;
       iTunesStates.CurrentTrackPlayedTime.value = playedTime;
       iTunesStates.CurrentTrackRemainingTime.value = remainingTime;
     }
@@ -264,9 +271,11 @@ const updateStates = (resend = false ) => {
   if (iTunesStates.PlayerState.value === "Playing") {
     if (pluginSettings["Track Timers"] === "On") {
       //get time here
-      const [playedTime, remainingTime] = getCurrentTrackPlayTime();
+      const [percentagePlayed, playedTime, remainingTime] = getCurrentTrackPlayTime();
+      iTunesStates.CurrentTrackPercentagePlayed.value = percentagePlayed;
       iTunesStates.CurrentTrackPlayedTime.value = playedTime;
       iTunesStates.CurrentTrackRemainingTime.value = remainingTime;
+      stateArray.push(iTunesStates.CurrentTrackPercentagePlayed);
       stateArray.push(iTunesStates.CurrentTrackPlayedTime);
       stateArray.push(iTunesStates.CurrentTrackRemainingTime);
     }

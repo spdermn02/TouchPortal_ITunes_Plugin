@@ -272,10 +272,12 @@ const updateStates = (resend = false ) => {
     if (pluginSettings["Track Timers"] === "On") {
       //get time here
       const [percentagePlayed, playedTime, remainingTime] = getCurrentTrackPlayTime();
-      iTunesStates.CurrentTrackPercentagePlayed.value = percentagePlayed;
+      if( percentagePlayed + "" !== iTunesStates.CurrentTrackPercentagePlayed.value ) {
+        iTunesStates.CurrentTrackPercentagePlayed.value = percentagePlayed + "";
+        stateArray.push(iTunesStates.CurrentTrackPercentagePlayed);
+      }
       iTunesStates.CurrentTrackPlayedTime.value = playedTime;
       iTunesStates.CurrentTrackRemainingTime.value = remainingTime;
-      stateArray.push(iTunesStates.CurrentTrackPercentagePlayed);
       stateArray.push(iTunesStates.CurrentTrackPlayedTime);
       stateArray.push(iTunesStates.CurrentTrackRemainingTime);
     }
@@ -291,9 +293,11 @@ const updateStates = (resend = false ) => {
   updatePlaylists();
 
   if (stateArray.length > 0) {
+    console.log(JSON.stringify(stateArray));
     updateTPClientStates(stateArray);
   }
   if( connectorArray.length > 0 ) {
+    console.log(JSON.stringify(connectorArray));
     updateTPClientConnectors(connectorArray);
   }
   running = false;

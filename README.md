@@ -3,6 +3,7 @@
 - [TouchPortal Plugin to Control ITunes](#touchportal-plugin-to-control-itunes)
   - [Notes/Warnings](#noteswarnings)
   - [Change Log](#change-log)
+    - [3.0.3](#303)
     - [3.0.2](#302)
     - [3.0.1](#301)
     - [3.0.0](#300)
@@ -38,6 +39,9 @@
 ```
 
 ## Change Log
+### 3.0.3
+* Bug Fix
+  * Fixed TP Performance Warning Alert
 
 ### 3.0.2
 * Added
@@ -83,7 +87,7 @@
 
 
 ## Setup
-1. Download the TPiTunes.tpp file from [here](https://github.com/spdermn02/TouchPortal_ITunes_Plugin/raw/master/resources/TPiTunes.tpp)
+1. Download the TPiTunes.tpp file from [here](https://github.com/spdermn02/TouchPortal_ITunes_Plugin/releases/latest)
 1. Import the Plug-in into Touch Portal 
     
     ![TP Import Plug-In](images/tp_import_plugin.png)
